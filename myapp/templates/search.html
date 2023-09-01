@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<style>
+	
+	body{margin-top:20px;}
+
+.comparison-table {
+    width: 100%;
+    font-size: .875rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar
+}
+
+.comparison-table table {
+    min-width: 41rem;
+    table-layout: fixed
+}
+
+.comparison-table table tbody+tbody {
+    border-top-width: 1px
+}
+
+.comparison-table .table-bordered thead td {
+    border-bottom-width: 1px
+}
+
+.comparison-table .comparison-item {
+    position: relative;
+    padding: .875rem .75rem 1.125rem;
+    border: 1px solid #e7e7e7;
+    background-color: #fff;
+    text-align: center
+}
+
+.comparison-table .comparison-item .comparison-item-thumb {
+    display: block;
+    width: 5rem;
+    margin-right: auto;
+    margin-bottom: .75rem;
+    margin-left: auto
+}
+
+.comparison-table .comparison-item .comparison-item-thumb>img {
+    display: block;
+    width: 100%
+}
+
+.comparison-table .comparison-item .comparison-item-title {
+    display: block;
+    width: 100%;
+    margin-bottom: 14px;
+    color: #222;
+    font-weight: 600;
+    text-decoration: none
+}
+
+.comparison-table .comparison-item .comparison-item-title:hover {
+    text-decoration: underline
+}
+
+.comparison-table .comparison-item .btn {
+    margin: 0
+}
+
+.comparison-table .comparison-item .remove-item {
+    display: block;
+    position: absolute;
+    top: -.3125rem;
+    right: -.3125rem;
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: 50%;
+    background-color: #f44336;
+    color: #fff;
+    text-align: center;
+    cursor: pointer
+}
+
+.comparison-table .comparison-item .remove-item .feather {
+    width: .875rem;
+    height: .875rem
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid #e7e7e7;
+}
+.bg-secondary {
+    background-color: #f7f7f7 !important;
+}
+</style>
+
+		<section class="section-services section-t8">
+			<div class="container">
+			  <h3>Search and Compare mobile only...</h3>
+			  <hr />
+			  <div class="form">
+				<form
+				  class="form-a"
+				  action=""
+				  method="post"
+				  enctype="multipart/form-data"
+				>
+				{% csrf_token %}
+				  <div class="row">
+					<div class="col-md-10 mb-2">
+					  <div class="form-group">
+						<label class="pb-2" for="Type">Search</label>
+						<input
+						  type="text"
+						  class="form-control form-control-a"
+						  placeholder="Search and Compare Mobiles"
+						  value="{{request.POST.search}}"
+						  name="search"
+						/>
+					  </div>
+					</div>
+					<div class="col-md-2 mt-4">
+					  <button type="submit" class="btn btn-primary">search</button>
+					</div>
+				  </div>
+				</form>
+			  </div>
+			  <h6 class="mt-4">Search and Compare Mobiles with "({{request.POST.search}})"</h6>
+			  <hr />
+{% if data %}
+			  <div class="container pb-5 mb-2">
+				<div class="comparison-table">
+					<table class="table table-bordered">
+						<thead class="bg-secondary">
+							<tr>
+								<td class="align-middle">
+
+									<div class="comparison-item">
+										<img src="/static/assets/img/search.png" alt="" style="width: 160px; height: 160px;">
+										
+									</div>
+								</td>
+								{% for i in data %}
+								<td> 
+									<div class="comparison-item">
+										<img src="{{ i.image }}" alt="{{ i.model }}" style="width: 160px; height: 160px;">
+										<a class="comparison-item-title" href="{{i.link}}">{{ i.model }}</a>
+									</div>
+
+								</td>{% endfor %}
+								                  
+							</tr>
+						</thead>
+			
+						<tbody id="summary" data-filter="target">
+							<tr class="bg-secondary">
+								
+								<th class="text-uppercase">Site</th>
+								{% for i in data %}
+								<td><img src="{{ i.logo }}" alt="{{ i.model }}" style="width: 300px; height: 60px;">
+								</td>
+								{% endfor %}
+							</tr>
+							<tr class="bg-secondary">
+								
+								<th class="text-uppercase">Summary</th>
+								{% for i in data %}
+								<td><span class="text-dark font-weight-semibold">{{i.name}}</span></td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Performance</th>
+								{% for i in data %}
+								<td>{{i.performance}}</td>
+								{% endfor %}
+							</tr>
+							
+							<tr>
+								<th>Display</th>
+								{% for i in data %}
+								<td>{{i.display}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Storage</th>
+								{% for i in data %}
+								<td>{{i.storage}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Rear Camera</th>
+								{% for i in data %}
+								<td>{{i.back}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Battery</th>
+								{% for i in data %}
+								<td>{{i.battery}}</td>
+								{% endfor %}
+							</tr>
+						</tbody>
+			
+						<tbody id="performance" data-filter="target">
+							<tr class="bg-secondary">
+								<th class="text-uppercase">Performance</th>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+							</tr>
+							<tr>
+								<th>Processor</th>
+								{% for i in data %}
+								<td>{{i.processor}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Resolution</th>
+								{% for i in data %}
+								<td>{{i.resolution}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>RAM</th>
+								{% for i in data %}
+								<td>{{i.RAM}}</td>
+								{% endfor %}
+							</tr>
+						</tbody>
+			
+						<tbody id="storage" data-filter="target">
+							<tr class="bg-secondary">
+								<th class="text-uppercase">Storage</th>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+							</tr>
+							<tr>
+								<th>Internal memory</th>
+								{% for i in data %}
+								<td>{{i.storage}}</td>
+								{% endfor %}
+							</tr>
+						</tbody>
+			
+						<tbody id="camera" data-filter="target">
+							<tr class="bg-secondary">
+								<th class="text-uppercase">Camera</th>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+							</tr>
+							<tr>
+								<th>Front Camera</th>
+								{% for i in data %}
+								<td>{{i.front}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Rear Camera</th>
+								{% for i in data %}
+								<td>{{i.back}}</td>
+								{% endfor %}
+
+							</tr>
+						</tbody>
+			
+						<tbody id="battery" data-filter="target">
+							<tr class="bg-secondary">
+								<th class="text-uppercase">Battery</th>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+							</tr>
+							<tr>
+								<th>Capacity</th>
+								{% for i in data %}
+								<td>{{i.battery}}</td>
+								{% endfor %}
+							</tr>
+						</tbody>
+
+						<tbody id="extra" data-filter="target">
+							<tr class="bg-secondary">
+								<th class="text-uppercase">extra</th>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+							</tr>
+							<tr>
+								<th>Weight</th>
+								{% for i in data %}								
+								<td>{{i.weight}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>SIM</th>
+								{% for i in data %}
+								<td>{{i.sim}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>OS</th>
+								{% for i in data %}
+								<td>{{i.os}}</td>
+								{% endfor %}
+							</tr>
+						</tbody>
+
+			
+						<tbody id="price" data-filter="target">
+							<tr class="bg-secondary">
+								<th class="text-uppercase">Price</th>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+							</tr>
+							<tr>
+								<th>Price</th>
+								{% for i in data %}
+								<td>{{i.price}}</td>
+								{% endfor %}
+							</tr>
+
+						</tbody>
+
+
+						<tbody id="price" data-filter="target">
+							<tr class="bg-secondary">
+								<th class="text-uppercase">Ratings and reviews</th>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+								<td><span class="text-dark font-weight-semibold"></span></td>
+							</tr>
+							<tr>
+								<th>Rating</th>
+								{% for i in data %}
+								<td>{{i.rating}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Comment</th>
+								{% for i in data %}
+								<td>{{i.thought}}</td>
+								{% endfor %}
+							</tr>
+							<tr>
+								<th>Review</th>
+								{% for i in data %}
+								<td>{{i.review}}</td>
+								{% endfor %}
+							</tr>
+							
+						  </tbody>
+						  <tbody id="view">
+							<tr>
+								<th></th>
+								{% for i in data %}
+								<td>
+									<a href="{{ i.link }}" target="_blank">
+										<button class="btn btn-outline-primary btn-block" type="button" data-toggle="toast" data-target="">
+											View
+										</button>
+									</a>
+								</td>
+								{% endfor %}
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
+
+
+				
+			</div>
+{% endif%}
+			</div>
+				
+			{% include 'footer.html' %} 
+		  </section>
+	</main>
+	
+{% endblock %}
